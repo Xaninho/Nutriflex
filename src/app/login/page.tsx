@@ -1,11 +1,24 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loginInProgress, setLoginInProgress] = useState(false);
+
+    async function handleFormSubmit(event : any) {
+        event.preventDefault();
+
+        setLoginInProgress(true);
+       
+        await signIn('credentials');
+
+        setLoginInProgress(false);
+
+    }
 
     return (
         <section className="mt-8">
@@ -13,11 +26,12 @@ export default function LoginPage() {
                 Login
             </h1>
 
-            <form className="block max-w-xs mx-auto">
+            <form className="block max-w-xs mx-auto" onSubmit={handleFormSubmit}>
 
                 <input
                     type="text"
                     placeholder="email"
+                    disabled={loginInProgress}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
@@ -25,17 +39,18 @@ export default function LoginPage() {
                 <input
                     type="password"
                     placeholder="password"
+                    disabled={loginInProgress}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
-                <button type="submit">Login</button>
+                <button type="submit" disabled={loginInProgress}>Login</button>
 
                 <div className="my-4 text-center text-gray-500">
                     or login with provider
                 </div>
 
-                <button className="flex gap-4 justify-center">
+                <button className="flex gap-4 justify-center" disabled={loginInProgress}>
                     <Image src={'/google.png'} alt="Google" width={32} height={32} />
                     Login with Google
                 </button>
