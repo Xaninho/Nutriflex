@@ -3,9 +3,12 @@ import {User}  from "@/models/User"
 import NextAuth from "next-auth/next"
 import bcrypt from "bcrypt"
 import * as mongoose from "mongoose"
+import { MongoDBAdapter } from "@auth/mongodb-adapter"
+import clientPromise from "@/libs/mongoConnect"
 
 const handler = NextAuth({
     secret: process.env.SECRET,
+    adapter: MongoDBAdapter(clientPromise),
     providers: [
         CredentialsProvider({
           // The name to display on the sign in form (e.g. 'Sign in with...')
