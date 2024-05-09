@@ -13,14 +13,30 @@ export default function ProfilePage() {
     const [userName, setUserName] = useState('');
     const [saved, setSaved] = useState(false);
     const [image, setImage] = useState('');
-    const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const {status} = session;
 
+    const [streetAddress, setStreetAddress] = useState('');
+    const [city, setCity] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+    const [country, setCountry] = useState('');
+    const [phone, setPhone] = useState('');
+
     useEffect(() => {
         if (status === 'authenticated') {
+
             setUserName(session?.data?.user?.name);
             setImage(session?.data?.user?.image);
+            
+            fetch('/api/profile').then(response => {
+                response.json().then(data => {
+                    setStreetAddress(data.streetAddress);
+                    setCity(data.city);
+                    setPostalCode(data.postalCode);
+                    setCountry(data.country);
+                    setPhone(data.phone);
+                })
+            })
         }
     }, [session, status]);
 
@@ -60,7 +76,15 @@ export default function ProfilePage() {
         const response = await fetch('/api/profile', {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ name: userName})
+            body: JSON.stringify({
+                name: userName,
+                image,
+                streetAddress,
+                phone,
+                postalCode,
+                city,
+                country
+            })
         });
 
         setIsSaving(false);
@@ -97,7 +121,7 @@ export default function ProfilePage() {
                         Saving...
                     </InfoBox>
                 )}
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-4">
                     <div>
                         <div className="p-2 rounded-lg relative max-w-[120px]">
 
@@ -111,11 +135,23 @@ export default function ProfilePage() {
                             </label>
                         </div>
                     </div>    
+
                     <form className="grow" onSubmit={handleProfileInfoUpdate}>
+                        
                         <input type="text" placeholder="First and last Name" value={userName} onChange={ev => setUserName(ev.target.value)} />
-                        <input type="email" disabled={true} value={session?.data?.user?.email} placeholder="Email" />
+                        <input type="email" placeholder="Email" value={session?.data?.user?.email} />
+                        <input type="tel" placeholder="Phone Number" value={phone} onChange={ev => setPhone(ev.target.value)} />
+
+                        <input type="text" placeholder="Street Address" value={streetAddress} onChange={ev => setStreetAddress(ev.target.value)} />
+                        <div className="flex gap-4">
+                            <input type="text" placeholder="City" value={city} onChange={ev => setCity(ev.target.value)} />
+                            <input type="text" placeholder="Postal Code" value={postalCode} onChange={ev => setPostalCode(ev.target.value)} />
+                        </div>
+                        <input type="text" placeholder="Country" value={country} onChange={ev => setCountry(ev.target.value)} />
+
                         <button type="submit">Save</button>
                     </form>
+
                 </div>
             </div>
 

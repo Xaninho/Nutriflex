@@ -9,6 +9,7 @@ section.hero{
 
 input[type="email"],
 input[type="password"],
+input[type="tel"],
 input[type="text"]{
     @apply block w-full my-4 rounded-xl;
     @apply border p-2 border-gray-300 bg-gray-200;
@@ -16,6 +17,7 @@ input[type="text"]{
 
 input[type="email"]:disabled,
 input[type="password"]:disabled,
+input[type="tel"]
 input[type="text"]:disabled {
     @apply bg-gray-300 cursor-not-allowed border-0 text-gray-500;
 }
