@@ -3,6 +3,9 @@ import { useSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import InfoBox from '@/components/layout/InfoBox';
+import SuccessBox from '@/components/layout/SuccessBox';
+import toast from 'react-hot-toast';
 
 export default function ProfilePage() {
 
@@ -29,15 +32,21 @@ export default function ProfilePage() {
             const data = new FormData();
             data.set('file', files[0]);
 
-            setIsUploading(true);
+            toast('Uploading...');
+
             const response = await fetch('/api/upload', {
                 method: 'POST',
                 body: data
-            })
+            });
 
-            const link = await response.json();
-            setImage(link);
-            setIsUploading(false);
+            if (response.ok) {
+                const link = await response.json();
+                setImage(link);
+                toast.success('Upload complete!');
+            } else {
+                toast.error('Upload error!');
+            }
+           
         }
         
     }
@@ -79,19 +88,14 @@ export default function ProfilePage() {
             </h2>
             <div className="max-w-ws mx-auto">
                 {saved && (
-                    <h2 className="text-center bg-green-100 p-4 rounded-lg border border-green-300">
+                    <SuccessBox>
                         Profile Saved!
-                    </h2>
+                    </SuccessBox>
                 )}
                 {isSaving && (
-                    <h2 className="text-center bg-blue-100 p-4 rounded-lg border border-blue-300">
+                    <InfoBox>
                         Saving...
-                    </h2>
-                )}
-                {isUploading && (
-                    <h2 className="text-center bg-blue-100 p-4 rounded-lg border border-blue-300">
-                        Uploading...
-                    </h2>
+                    </InfoBox>
                 )}
                 <div className="flex gap-4 items-center">
                     <div>
