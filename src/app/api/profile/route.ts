@@ -20,6 +20,10 @@ export async function GET() {
     const session = await getServerSession(authOptions);
     const email = session?.user?.email;
 
+    if (!email) {
+        return Response.json({});
+    }
+
     return Response.json(
         await User.findOne({email})
     );

@@ -6,6 +6,9 @@ import { useEffect, useState } from 'react';
 import InfoBox from '@/components/layout/InfoBox';
 import SuccessBox from '@/components/layout/SuccessBox';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
+import Tabs from '@/components/layout/Tabs';
+import { set } from 'mongoose';
 
 export default function ProfilePage() {
 
@@ -15,12 +18,14 @@ export default function ProfilePage() {
     const [image, setImage] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const {status} = session;
+    const [profileFetched, setProfileFetched] = useState(false);
 
     const [streetAddress, setStreetAddress] = useState('');
     const [city, setCity] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [country, setCountry] = useState('');
     const [phone, setPhone] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         if (status === 'authenticated') {
@@ -35,6 +40,8 @@ export default function ProfilePage() {
                     setPostalCode(data.postalCode);
                     setCountry(data.country);
                     setPhone(data.phone);
+                    setIsAdmin(data.admin);
+                    setProfileFetched(true);
                 })
             })
         }
@@ -94,7 +101,7 @@ export default function ProfilePage() {
         }
     }
 
-    if (status === 'loading') {
+    if (status === 'loading' || !profileFetched) {
         return 'Loading...';
     }
 
@@ -104,6 +111,9 @@ export default function ProfilePage() {
 
     return (
         <section className="mt-8">
+
+            <Tabs isAdmin={isAdmin} />
+            
             <h1 className="text-center text-primary text-4xl mb-4">
                 Profile
             </h1>

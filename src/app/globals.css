@@ -34,3 +34,7 @@ button[type="submit"], .submit{
 button[type="submit"]:disabled, .submit:disabled {
     @apply cursor-not-allowed bg-gray-300 text-gray-700;
 }
+
+div.tabs > * {
+    @apply bg-gray-300 text-grey-700 rounded-full py-2 px-4;
+}
