@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import Tabs from '@/components/layout/Tabs';
 import { set } from 'mongoose';
+import EditableImage from '@/components/layout/EditableImage';
 
 export default function ProfilePage() {
 
@@ -46,33 +47,6 @@ export default function ProfilePage() {
             })
         }
     }, [session, status]);
-
-    async function handleFileChange(ev : any) {
-        const files = ev.target.files;
-
-        if (files?.length > 0) {
-
-            const data = new FormData();
-            data.set('file', files[0]);
-
-            toast('Uploading...');
-
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: data
-            });
-
-            if (response.ok) {
-                const link = await response.json();
-                setImage(link);
-                toast.success('Upload complete!');
-            } else {
-                toast.error('Upload error!');
-            }
-           
-        }
-        
-    }
 
     async function handleProfileInfoUpdate(ev : any) {
 
@@ -134,15 +108,7 @@ export default function ProfilePage() {
                 <div className="flex gap-4">
                     <div>
                         <div className="p-2 rounded-lg relative max-w-[120px]">
-
-                            {image && (
-                                <Image className="rounded-lg w-full h-full mb-1" src={image} width={0} height={0} alt= {'avatar'}/>
-                            )}
-
-                            <label>
-                                <input type="file" className="hidden" onChange={handleFileChange} />
-                                <span className="block border border-gray-300 rounded-lg p-2 text-center">Change Avatar</span>
-                            </label>
+                            <EditableImage link={image} setLink={setImage} />
                         </div>
                     </div>    
 
