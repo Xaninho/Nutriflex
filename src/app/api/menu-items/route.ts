@@ -12,3 +12,10 @@ export async function GET(req, res) {
     mongoose.connect(process.env.MONGODB_URL);
     return Response.json(await MenuItem.find());
 }
+
+export async function PUT(req, res) {
+    mongoose.connect(process.env.MONGODB_URL);
+    const [_id, data] = [req.params._id, req.json()];
+    await MenuItem.findByIdAndUpdate(_id, data);
+    return Response.json(true);
+}
