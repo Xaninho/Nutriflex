@@ -1,27 +1,37 @@
 'use client';
 import Left from "@/components/icons/Left";
-import EditableImage from "@/components/layout/EditableImage";
 import MenuItemForm from "@/components/layout/MenuItemForm";
 import Tabs from "@/components/layout/Tabs";
-import MenuItem from "@/components/menu/MenuItem";
 import useProfile from "@/components/useProfile";
-import { redirect } from "next/dist/server/api-utils";
 import Link from "next/link";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
 
-export default function NewMenuItemPage() {
-    
-    const {loading, data} = useProfile();
-    const [redirectToItems, setRedirectToItems] = useState(false);
-    
 
-    async function handleFormSubmit(ev: any) {
+export default function EditMenuItemPage() {
+
+    const {id} = useParams();
+    const {loading, data} = useProfile();
+    const [menuItem, setMenuItem] = useState(null);
+
+    useEffect(() => {
+        fetch('/api/menu-items').then(res => {
+            res.json().then(items => {
+                const item = items.find(i => i._id === id);
+                setMenuItem(item);
+            });
+        });
+    }, []);
+
+    async function handleFormSubmit(ev: any, data : any) {
         ev.preventDefault();
+
+        data = {...data, _id: id};
 
         const savingPromise = new Promise(async (resolve, reject) => {
             const response = await fetch('/api/menu-items', {
-                method: 'POST',
+                method: 'PUT',
                 body: JSON.stringify(data),
                 headers: {'Content-Type': 'application/json'},
             });
@@ -33,13 +43,11 @@ export default function NewMenuItemPage() {
                 reject();
             }
         });
-        
-        setRedirectToItems(true);
+
+        await savingPromise;
+
     }
 
-    if (redirectToItems) {
-        return redirect('/menu-items');
-    }
 
     if (loading) {
         return <p>Loading user info...</p>;
@@ -48,6 +56,7 @@ export default function NewMenuItemPage() {
     if (!data.admin) {
         return 'Not an admin.';
     }
+    
     return (
         <section className="mt-8">
             <Tabs isAdmin={true} />
@@ -59,7 +68,8 @@ export default function NewMenuItemPage() {
                     </a>
                 </Link>
             </div>
-           <MenuItemForm onSubmit={handleFormSubmit} menuItem={null} />
+
+           <MenuItemForm menuItem={null} onSubmit={handleFormSubmit}/>
 
         </section>
     );
