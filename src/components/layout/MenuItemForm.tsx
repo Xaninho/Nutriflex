@@ -2,7 +2,7 @@ import Link from "next/link";
 import Left from "../icons/Left";
 import Tabs from "./Tabs";
 import EditableImage from "./EditableImage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuItemPriceProps from "./menuItemPriceProps";
 
 export default function MenuItemForm({onSubmit, menuItem}) {
@@ -13,7 +13,17 @@ export default function MenuItemForm({onSubmit, menuItem}) {
     const [image, setImage] = useState(menuItem?.image || '');
     const [sizes, setSizes] = useState(menuItem?.sizes || []);
     const [extraIngredientPrices, setExtraIngredientPrices] = useState(menuItem?.extraIngredientPrices || []);
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState(menuItem?.category || '');
 
+    useEffect(() => {
+        fetch('/api/categories')
+            .then(response => 
+                response.json().then(categories => {
+                    setCategories(categories);
+                }
+            ))
+    }, [])
   
     return (
         <form className="mt-8 max-w-md max-auto" onSubmit={ev => onSubmit(ev, {image, name, description, basePrice, sizes, extraIngredientPrices})}>
@@ -22,22 +32,33 @@ export default function MenuItemForm({onSubmit, menuItem}) {
                         <EditableImage link={image} setLink={setImage} />
                     </div>
                     <div className="grow">
+
                         <label> Item Name </label>
                         <input
                             value={name}
                             onChange={ev => setName(ev.target.value)} 
                             type="text" />
-                        <label> Item Description </label>
+
+                        <label> Item Description </label>                   
                         <input
                             value={description}
                             onChange={ev => setDescription(ev.target.value)} 
                             type="text" />
+                            
                         <label> Base Price </label>
                         <input
                             value={basePrice}
                             onChange={ev => setBasePrice(ev.target.value)} 
                             type="text" />
 
+                        <label> Category </label>
+                        <select value={category} onChange={ev => setCategory(ev.target.value)}>
+                            {categories?.length > 0 && .map(category => (
+                                <option key={category.id} value={category.id}>{category.name}</option>
+                            ))}   
+                        </select>
+
+                    
                         <MenuItemPriceProps name={'Sizes'} addLabel={'Add item size'} props={sizes} setProps={setSizes} />
                         <MenuItemPriceProps name={'Extra Ingredients'} addLabel={'Add ingredients prices'} props={extraIngredientPrices} setProps={setExtraIngredientPrices} />
                         

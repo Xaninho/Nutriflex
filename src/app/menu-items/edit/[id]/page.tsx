@@ -1,4 +1,5 @@
 'use client';
+import DeleteButton from "@/components/DeleteButton";
 import Left from "@/components/icons/Left";
 import MenuItemForm from "@/components/layout/MenuItemForm";
 import Tabs from "@/components/layout/Tabs";
@@ -48,6 +49,23 @@ export default function EditMenuItemPage() {
 
     }
 
+    async function handleDeleteClick() {
+        const deletionPromise = new Promise(async (resolve, reject) => {
+            const response = await fetch(`/api/menu-items?_id=${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                toast.success('Item deleted!');
+                resolve();
+            } else {
+                reject();
+            }
+        });
+
+        await deletionPromise;
+    }
+
 
     if (loading) {
         return <p>Loading user info...</p>;
@@ -70,6 +88,12 @@ export default function EditMenuItemPage() {
             </div>
 
            <MenuItemForm menuItem={null} onSubmit={handleFormSubmit}/>
+
+           <div className="max-w-xs ml-auto mt-4 pl-4">
+                <div className="border max-w-ws ml-auto pl-4">
+                    <DeleteButton label="Delete this menu item" onDelete={handleDeleteClick} />
+                </div>
+           </div>
 
         </section>
     );
