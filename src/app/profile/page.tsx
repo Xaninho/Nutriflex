@@ -1,136 +1,73 @@
-'use client'
-import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import InfoBox from '@/components/layout/InfoBox';
-import SuccessBox from '@/components/layout/SuccessBox';
-import toast from 'react-hot-toast';
-import Link from 'next/link';
-import Tabs from '@/components/layout/Tabs';
-import { set } from 'mongoose';
-import EditableImage from '@/components/layout/EditableImage';
+'use client';
+import EditableImage from "@/components/layout/EditableImage";
+import InfoBox from "@/components/layout/InfoBox";
+import SuccessBox from "@/components/layout/SuccessBox";
+import UserForm from "@/components/layout/UserForm";
+import Tabs from "@/components/layout/Tabs";
+import {useSession} from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import {redirect} from "next/navigation";
+import {useEffect, useState} from "react";
+import toast from "react-hot-toast";
 
 export default function ProfilePage() {
+  const session = useSession();
 
-    const session = useSession();
-    const [userName, setUserName] = useState('');
-    const [saved, setSaved] = useState(false);
-    const [image, setImage] = useState('');
-    const [isSaving, setIsSaving] = useState(false);
-    const {status} = session;
-    const [profileFetched, setProfileFetched] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [profileFetched, setProfileFetched] = useState(false);
+  const {status} = session;
 
-    const [streetAddress, setStreetAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [postalCode, setPostalCode] = useState('');
-    const [country, setCountry] = useState('');
-    const [phone, setPhone] = useState('');
-    const [isAdmin, setIsAdmin] = useState(false);
-
-    useEffect(() => {
-        if (status === 'authenticated') {
-
-            setUserName(session?.data?.user?.name);
-            setImage(session?.data?.user?.image);
-            
-            fetch('/api/profile').then(response => {
-                response.json().then(data => {
-                    setStreetAddress(data.streetAddress);
-                    setCity(data.city);
-                    setPostalCode(data.postalCode);
-                    setCountry(data.country);
-                    setPhone(data.phone);
-                    setIsAdmin(data.admin);
-                    setProfileFetched(true);
-                })
-            })
-        }
-    }, [session, status]);
-
-    async function handleProfileInfoUpdate(ev : any) {
-
-        ev.preventDefault();
-        setSaved(false);
-        setIsSaving(true);
-
-        const response = await fetch('/api/profile', {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                name: userName,
-                image,
-                streetAddress,
-                phone,
-                postalCode,
-                city,
-                country
-            })
-        });
-
-        setIsSaving(false);
-
-        if (response.ok) {
-            setSaved(true);
-        }
+  useEffect(() => {
+    if (status === 'authenticated') { 
+      fetch('/api/profile').then(response => {
+        response.json().then(data => {
+          setUser(data);
+          setIsAdmin(data.admin);
+          setProfileFetched(true);
+        })
+      });
     }
+  }, [session, status]);
 
-    if (status === 'loading' || !profileFetched) {
-        return 'Loading...';
-    }
+  async function handleProfileInfoUpdate(ev, data) {
+    ev.preventDefault();
 
-    if (status === 'unauthenticated') {
-        redirect('/login');
-    }
+    const savingPromise = new Promise(async (resolve, reject) => {
+      const response = await fetch('/api/profile', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+      });
+      if (response.ok)
+        resolve()
+      else
+        reject();
+    });
 
-    return (
-        <section className="mt-8">
+    await toast.promise(savingPromise, {
+      loading: 'Saving...',
+      success: 'Profile saved!',
+      error: 'Error',
+    });
 
-            <Tabs isAdmin={isAdmin} />
-            
-            <h1 className="text-center text-primary text-4xl mb-4">
-                Profile
-            </h1>
-            <h2 className="text-center bg-green-100 p-4 rounded-lg border border-green-300">
-                Profile saved!
-            </h2>
-            <div className="max-w-ws mx-auto">
-                {saved && (
-                    <SuccessBox>
-                        Profile Saved!
-                    </SuccessBox>
-                )}
-                {isSaving && (
-                    <InfoBox>
-                        Saving...
-                    </InfoBox>
-                )}
-                <div className="flex gap-4">
-                    <div>
-                        <div className="p-2 rounded-lg relative max-w-[120px]">
-                            <EditableImage link={image} setLink={setImage} />
-                        </div>
-                    </div>    
+  }
 
-                    <form className="grow" onSubmit={handleProfileInfoUpdate}>
-                        
-                        <input type="text" placeholder="First and last Name" value={userName} onChange={ev => setUserName(ev.target.value)} />
-                        <input type="email" placeholder="Email" value={session?.data?.user?.email} />
-                        <input type="tel" placeholder="Phone Number" value={phone} onChange={ev => setPhone(ev.target.value)} />
+  if (status === 'loading' || !profileFetched) {
+    return 'Loading...';
+  }
 
-                        <input type="text" placeholder="Street Address" value={streetAddress} onChange={ev => setStreetAddress(ev.target.value)} />
-                        <div className="flex gap-4">
-                            <input type="text" placeholder="City" value={city} onChange={ev => setCity(ev.target.value)} />
-                            <input type="text" placeholder="Postal Code" value={postalCode} onChange={ev => setPostalCode(ev.target.value)} />
-                        </div>
-                        <input type="text" placeholder="Country" value={country} onChange={ev => setCountry(ev.target.value)} />
+  if (status === 'unauthenticated') {
+    return redirect('/login');
+  }
 
-                        <button type="submit">Save</button>
-                    </form>
-
-                </div>
-            </div>
-
-        </section>
-    );
+  return (
+    <section className="mt-8">
+      <Tabs isAdmin={isAdmin} />
+      <div className="max-w-2xl mx-auto mt-8">
+        <UserForm user={user} onSave={handleProfileInfoUpdate} />
+      </div>
+    </section>
+  );
 }
