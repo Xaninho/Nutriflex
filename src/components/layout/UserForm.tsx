@@ -2,10 +2,11 @@
 'use client';
 import AddressInputs from "@/components/layout/AddressInputs";
 import EditableImage from "@/components/layout/EditableImage";
-import {useProfile} from "@/components/useProfile";
+import useProfile from "@/components/useProfile";
 import {useState} from "react";
 
-export default function UserForm({user,onSave}) {
+export default function UserForm({user,onSave} : any) {
+
   const [userName, setUserName] = useState(user?.name || '');
   const [image, setImage] = useState(user?.image || '');
   const [phone, setPhone] = useState(user?.phone || '');
@@ -16,7 +17,7 @@ export default function UserForm({user,onSave}) {
   const [admin, setAdmin] = useState(user?.admin || false);
   const {data:loggedInUserData} = useProfile();
 
-  function handleAddressChange(propName, value) {
+  function handleAddressChange(propName : string, value : any) { {
     if (propName === 'phone') setPhone(value);
     if (propName === 'streetAddress') setStreetAddress(value);
     if (propName === 'postalCode') setPostalCode(value);
@@ -58,7 +59,7 @@ export default function UserForm({user,onSave}) {
           addressProps={{phone, streetAddress, postalCode, city, country}}
           setAddressProp={handleAddressChange}
         />
-        {loggedInUserData.admin && (
+        {loggedInUserData!.admin && (
           <div>
             <label className="p-2 inline-flex items-center gap-2 mb-2" htmlFor="adminCb">
               <input
@@ -74,4 +75,5 @@ export default function UserForm({user,onSave}) {
       </form>
     </div>
   );
+}
 }

@@ -1,12 +1,12 @@
 'use client';
 import {CartContext} from "@/components/AppContext";
-import Bars2 from "@/components/icons/Bars2";
+import Bars2 from "@/components/icons/Bars";
 import ShoppingCart from "@/components/icons/ShoppingCart";
 import {signOut, useSession} from "next-auth/react";
 import Link from "next/link";
 import {useContext, useState} from "react";
 
-function AuthLinks({status, userName}) {
+function AuthLinks({status, userName} : {status: string, userName: string}) {
   if (status === 'authenticated') {
     return (
       <>
@@ -37,9 +37,19 @@ export default function Header() {
   const session = useSession();
   const status = session?.status;
   const userData = session.data?.user;
-  let userName = userData?.name || userData?.email;
+  let userName: string = userData?.name ?? userData?.email ?? '';
+
+  const cartContext = useContext(CartContext);
+
+  if (!cartContext) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  //@ts-ignore
   const {cartProducts} = useContext(CartContext);
+
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+
   if (userName && userName.includes(' ')) {
     userName = userName.split(' ')[0];
   }

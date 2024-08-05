@@ -1,16 +1,16 @@
 'use client';
 import {CartContext, cartProductPrice} from "@/components/AppContext";
-import Trash from "@/components/icons/Trash";
 import AddressInputs from "@/components/layout/AddressInputs";
 import SectionHeaders from "@/components/layout/SectionHeaders";
 import CartProduct from "@/components/menu/CartProduct";
-import {useProfile} from "@/components/UseProfile";
-import Image from "next/image";
+import useProfile from "@/components/useProfile";
+
 import {useContext, useEffect, useState} from "react";
 import toast from "react-hot-toast";
 
 export default function CartPage() {
-  const {cartProducts,removeCartProduct} = useContext(CartContext);
+  //@ts-ignore
+  const {cartProducts, removeCartProduct} = useContext(CartContext);
   const [address, setAddress] = useState({});
   const {data:profileData} = useProfile();
 
@@ -40,14 +40,16 @@ export default function CartPage() {
   for (const p of cartProducts) {
     subtotal += cartProductPrice(p);
   }
-  function handleAddressChange(propName, value) {
+
+  function handleAddressChange(propName: string, value: string) {
     setAddress(prevAddress => ({...prevAddress, [propName]:value}));
   }
-  async function proceedToCheckout(ev) {
-    ev.preventDefault();
+
+  async function proceedToCheckout(event : any) {
+    event.preventDefault();
     // address and shopping cart products
 
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise<void>((resolve, reject) => {
       fetch('/api/checkout', {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
@@ -75,7 +77,7 @@ export default function CartPage() {
   if (cartProducts?.length === 0) {
     return (
       <section className="mt-8 text-center">
-        <SectionHeaders mainHeader="Cart" />
+        <SectionHeaders mainHeader="Cart" subHeader="" />
         <p className="mt-4">Your shopping cart is empty 😔</p>
       </section>
     );
@@ -84,14 +86,14 @@ export default function CartPage() {
   return (
     <section className="mt-8">
       <div className="text-center">
-        <SectionHeaders mainHeader="Cart" />
+        <SectionHeaders mainHeader="Cart" subHeader="" />
       </div>
       <div className="mt-8 grid gap-8 grid-cols-2">
         <div>
           {cartProducts?.length === 0 && (
             <div>No products in your shopping cart</div>
           )}
-          {cartProducts?.length > 0 && cartProducts.map((product, index) => (
+          {cartProducts?.length > 0 && cartProducts.map((product : any, index : number) : any => (
             <CartProduct
               key={index}
               product={product}

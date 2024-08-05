@@ -1,5 +1,6 @@
 import clientPromise from "@/libs/mongoConnect";
 import {UserInfo} from "@/models/UserInfo";
+//@ts-ignore
 import bcrypt from "bcrypt";
 import * as mongoose from "mongoose";
 import {User} from '@/models/User';
@@ -13,8 +14,8 @@ export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
     }),
     CredentialsProvider({
       name: 'Credentials',
@@ -23,11 +24,12 @@ export const authOptions = {
         username: { label: "Email", type: "email", placeholder: "test@example.com" },
         password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials, req) {
-        const email = credentials?.email;
+        const email = credentials?.username;
         const password = credentials?.password;
 
-        mongoose.connect(process.env.MONGO_URL);
+        mongoose.connect(process.env.MONGO_URL ?? '');
         const user = await User.findOne({email});
         const passwordOk = user && bcrypt.compareSync(password, user.password);
 
@@ -42,6 +44,8 @@ export const authOptions = {
 };
 
 export async function isAdmin() {
+
+  //@ts-ignore
   const session = await getServerSession(authOptions);
   const userEmail = session?.user?.email;
   if (!userEmail) {
@@ -52,8 +56,9 @@ export async function isAdmin() {
     return false;
   }
   return userInfo.admin;
+
 }
 
+//@ts-ignore
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST }

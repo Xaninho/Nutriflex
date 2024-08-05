@@ -5,7 +5,9 @@ import Image from "next/image";
 import {useEffect, useState} from "react";
 
 export default function HomeMenu() {
-  const [bestSellers, setBestSellers] = useState([]);
+
+  const [bestSellers, setBestSellers] = useState<any[]>([]);
+
   useEffect(() => {
     fetch('/api/menu-items').then(res => {
       res.json().then(menuItems => {
@@ -13,6 +15,7 @@ export default function HomeMenu() {
       });
     });
   }, []);
+
   return (
     <section className="">
       <div className="absolute left-0 right-0 w-full justify-start">

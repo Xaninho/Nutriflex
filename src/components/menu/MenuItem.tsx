@@ -2,20 +2,16 @@ import {CartContext} from "@/components/AppContext";
 import MenuItemTile from "@/components/menu/MenuItemTile";
 import Image from "next/image";
 import {useContext, useState} from "react";
+// @ts-ignore
 import FlyingButton from "react-flying-item";
-import toast from "react-hot-toast";
 
-export default function MenuItem(menuItem) {
-  const {
-    image,name,description,basePrice,
-    sizes, extraIngredientPrices,
-  } = menuItem;
-  const [
-    selectedSize, setSelectedSize
-  ] = useState(sizes?.[0] || null);
-  const [selectedExtras, setSelectedExtras] = useState([]);
+export default function MenuItem(menuItem : any) {
+
+  const { image,name,description,basePrice, sizes, extraIngredientPrices} = menuItem;
+  const [ selectedSize, setSelectedSize] = useState(sizes?.[0] || null);
+  const [selectedExtras, setSelectedExtras] = useState<any[]>([]);
   const [showPopup, setShowPopup] = useState(false);
-  const {addToCart} = useContext(CartContext);
+  const {addToCart} = useContext(CartContext) ?? {};
 
   async function handleAddToCartButtonClick() {
     console.log('add to cart');
@@ -24,15 +20,17 @@ export default function MenuItem(menuItem) {
       setShowPopup(true);
       return;
     }
-    addToCart(menuItem, selectedSize, selectedExtras);
+    if (addToCart) {
+      addToCart(menuItem, selectedSize, selectedExtras);
+    }
     await new Promise(resolve => setTimeout(resolve, 1000));
     console.log('hiding popup');
     setShowPopup(false);
   }
-  function handleExtraThingClick(ev, extraThing) {
-    const checked = ev.target.checked;
+  function handleExtraThingClick(_event : any, extraThing : any) {
+    const checked = _event.target.checked;
     if (checked) {
-      setSelectedExtras(prev => [...prev, extraThing]);
+      setSelectedExtras(previous => [...previous, extraThing]);
     } else {
       setSelectedExtras(prev => {
         return prev.filter(e => e.name !== extraThing.name);
@@ -74,7 +72,7 @@ export default function MenuItem(menuItem) {
               {sizes?.length > 0 && (
                 <div className="py-2">
                   <h3 className="text-center text-gray-700">Pick your size</h3>
-                  {sizes.map(size => (
+                  {sizes.map((size: any) => (
                     <label
                       key={size._id}
                       className="flex items-center gap-2 p-4 border rounded-md mb-1">
@@ -91,7 +89,7 @@ export default function MenuItem(menuItem) {
               {extraIngredientPrices?.length > 0 && (
                 <div className="py-2">
                   <h3 className="text-center text-gray-700">Any extras?</h3>
-                  {extraIngredientPrices.map(extraThing => (
+                  {extraIngredientPrices.map((extraThing: any) => (
                     <label
                       key={extraThing._id}
                       className="flex items-center gap-2 p-4 border rounded-md mb-1">

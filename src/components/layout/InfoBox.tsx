@@ -1,4 +1,4 @@
-export default function InfoBox({children}) {
+export default function InfoBox(children : string) {
     return (
         <h2 className="text-center bg-blue-100 p-4 rounded-lg border border-blue-300">
             {children}

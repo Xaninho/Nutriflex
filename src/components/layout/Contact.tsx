@@ -7,7 +7,7 @@ export default function Contact() {
                 <h2 className="text-primary font-bold text-4xl italic">Contact Us</h2>
             </div>
             <a className="text-4xl">
-                +46 738 123 123
+                +42 4242 4242
             </a>
         </section>
     );

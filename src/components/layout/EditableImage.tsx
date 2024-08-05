@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
-export default function EditableImage({link, setLink}) {
+export default function EditableImage({link, setLink} : {link: string, setLink: (link: string) => void}) {
 
     async function handleFileChange(ev : any) {
         const files = ev.target.files;

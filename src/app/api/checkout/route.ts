@@ -5,10 +5,13 @@ import mongoose from "mongoose";
 import {getServerSession} from "next-auth";
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
-export async function POST(req) {
-  mongoose.connect(process.env.MONGO_URL);
+export async function POST(req : any) {
+
+  mongoose.connect(process.env.MONGO_URL ?? '');
 
   const {cartProducts, address} = await req.json();
+
+  //@ts-ignore
   const session = await getServerSession(authOptions);
   const userEmail = session?.user?.email;
 
@@ -27,14 +30,14 @@ export async function POST(req) {
     let productPrice = productInfo.basePrice;
     if (cartProduct.size) {
       const size = productInfo.sizes
-        .find(size => size._id.toString() === cartProduct.size._id.toString());
+        .find((size : any) => size._id.toString() === cartProduct.size._id.toString());
       productPrice += size.price;
     }
     if (cartProduct.extras?.length > 0) {
       for (const cartProductExtraThing of cartProduct.extras) {
         const productExtras = productInfo.extraIngredientPrices;
         const extraThingInfo = productExtras
-          .find(extra => extra._id.toString() === cartProductExtraThing._id.toString());
+          .find((extra : any) => extra._id.toString() === cartProductExtraThing._id.toString());
         productPrice += extraThingInfo.price;
       }
     }

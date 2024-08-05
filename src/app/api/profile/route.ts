@@ -4,8 +4,8 @@ import {UserInfo} from "@/models/UserInfo";
 import mongoose from "mongoose";
 import {getServerSession} from "next-auth";
 
-export async function PUT(req) {
-  mongoose.connect(process.env.MONGO_URL);
+export async function PUT(req : any) {
+  mongoose.connect(process.env.MONGO_URL ?? '');
   const data = await req.json();
   const {_id, name, image, ...otherUserInfo} = data;
 
@@ -13,8 +13,9 @@ export async function PUT(req) {
   if (_id) {
     filter = {_id};
   } else {
+    //@ts-ignore
     const session = await getServerSession(authOptions);
-    const email = session.user.email;
+    const email = session!.user?.email;
     filter = {email};
   }
 
@@ -25,8 +26,8 @@ export async function PUT(req) {
   return Response.json(true);
 }
 
-export async function GET(req) {
-  mongoose.connect(process.env.MONGO_URL);
+export async function GET(req: any) {
+  mongoose.connect(process.env.MONGO_URL ?? '');
 
   const url = new URL(req.url);
   const _id = url.searchParams.get('_id');
@@ -35,6 +36,7 @@ export async function GET(req) {
   if (_id) {
     filterUser = {_id};
   } else {
+    //@ts-ignore
     const session = await getServerSession(authOptions);
     const email = session?.user?.email;
     if (!email) {
@@ -44,6 +46,7 @@ export async function GET(req) {
   }
 
   const user = await User.findOne(filterUser).lean();
+  //@ts-ignore
   const userInfo = await UserInfo.findOne({email:user.email}).lean();
 
   return Response.json({...user, ...userInfo});

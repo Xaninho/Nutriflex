@@ -1,8 +1,10 @@
 
-export default function AddressInputs({addressProps,setAddressProp,disabled=false}) {
+export default function AddressInputs({addressProps,setAddressProp,disabled=false} 
+  : {addressProps: any, setAddressProp: (key: string, value: string) => void, disabled?: boolean}) {
+
     const {phone, streetAddress, postalCode, city, country} = addressProps;
     return (
-      <>
+      <div>
         <label>Phone</label>
         <input
           disabled={disabled}
@@ -38,7 +40,7 @@ export default function AddressInputs({addressProps,setAddressProp,disabled=fals
           type="text" placeholder="Country"
           value={country || ''} onChange={ev => setAddressProp('country', ev.target.value)}
         />
-      </>
+      </div>
     );
   }
   

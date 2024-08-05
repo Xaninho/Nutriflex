@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 export default function useProfile() {
 
-    const [data, setData] = useState(false);
+    const [data, setData] = useState<any>();
     const [loading , setLoading] = useState(true);
 
     useEffect(() => {

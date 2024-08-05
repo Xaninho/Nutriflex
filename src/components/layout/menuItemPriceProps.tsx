@@ -1,18 +1,18 @@
 import { useState } from "react";
 
-export default function MenuItemPriceProps({name, addLabel, props, setProps}) {
+export default function MenuItemPriceProps({name, addLabel, props, setProps} : any) {
 
     const [isOpen, setIsOpen] = useState(false);
 
     function addProp() {
-        setProps(oldProps => {
+        setProps((oldProps : any) => {
             return [...oldProps, {name: '', price: ''}];
         })
     }
 
-    function editProp(ev, index, prop) {
-        const newValue = ev.target.value;
-        setProps(oldProps => {
+    function editProp(event: React.ChangeEvent<HTMLInputElement>, index: number, prop: string) {
+        const newValue = event.target.value;
+        setProps((oldProps: any[]) => {
             const newProps = [...oldProps];
             newProps[index][prop] = newValue;
             return newProps;
@@ -20,7 +20,7 @@ export default function MenuItemPriceProps({name, addLabel, props, setProps}) {
     }
 
     function removeProp(index : number) {    
-        setProps(prev => prev.filter((v,i) => i === index));
+        setProps((prev: any[]) => prev.filter((v: any, i: number) => i === index));
     }
 
     return (
@@ -39,7 +39,7 @@ export default function MenuItemPriceProps({name, addLabel, props, setProps}) {
                 <span>{props?.length}</span>
             </div>
             <div>
-                    {props?.length > 0 && props.map((size, index) => (
+                    {props?.length > 0 && props.map((size : any, index : number) => (
                     
                     <div className="flex gap-2">
                         <div>
