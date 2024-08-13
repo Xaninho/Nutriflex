@@ -9,7 +9,7 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'my-bucket.s3.amazonaws.com'
+                hostname: 'nutriflex-meals.s3.amazonaws.com'
             }
         ],
     },

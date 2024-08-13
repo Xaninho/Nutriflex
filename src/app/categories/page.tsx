@@ -1,139 +1,146 @@
-'use client'
+'use client';
 import DeleteButton from "@/components/DeleteButton";
-import Tabs from "@/components/layout/Tabs"
-import useProfile from "@/components/useProfile"
-import { useEffect, useState } from "react";
+import Tabs from "@/components/layout/Tabs";
+import {useEffect, useState} from "react";
+import useProfile from "@/components/useProfile";
+import toast from "react-hot-toast";
 
 export default function CategoriesPage() {
 
-    async function handleCategorySubmit(ev: React.FormEvent<HTMLFormElement>) {
-        ev.preventDefault();
+  const [categoryName, setCategoryName] = useState('');
+  const [categories, setCategories] = useState([]);
+  const {loading:profileLoading, data:profileData} = useProfile();
+  const [editedCategory, setEditedCategory] = useState(null);
 
-        const creationPromise = new Promise(async(resolve, reject) => {
-            
-            const data = {name: newCategoryName};
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-            if (editedCategory) {
-                data._id = editedCategory._id;
-            }
+  function fetchCategories() {
+    fetch('/api/categories').then(res => {
+      res.json().then(categories => {
+        setCategories(categories);
+      });
+    });
+  }
 
-            const response = await fetch('/api/categories', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
+  async function handleCategorySubmit(ev) {
+    ev.preventDefault();
+    const creationPromise = new Promise(async (resolve, reject) => {
+      const data = {name:categoryName};
+      if (editedCategory) {
+        data._id = editedCategory._id;
+      }
+      const response = await fetch('/api/categories', {
+        method: editedCategory ? 'PUT' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      setCategoryName('');
+      fetchCategories();
+      setEditedCategory(null);
+      if (response.ok)
+        resolve();
+      else
+        reject();
+    });
+    await toast.promise(creationPromise, {
+      loading: editedCategory
+                 ? 'Updating category...'
+                 : 'Creating your new category...',
+      success: editedCategory ? 'Category updated' : 'Category created',
+      error: 'Error, sorry...',
+    });
+  }
 
-            fetchCategories();
-            setCategoryName('');
+  async function handleDeleteClick(_id) {
+    const promise = new Promise(async (resolve, reject) => {
+      const response = await fetch('/api/categories?_id='+_id, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
 
-            if (response.ok) {
-                resolve();
-            } else {
-                reject();
-            } 
-        });
+    await toast.promise(promise, {
+      loading: 'Deleting...',
+      success: 'Deleted',
+      error: 'Error',
+    });
 
-        creationPromise.then(() => {
-            alert('Category created')
-        }).catch(() => {
-            console.error('Error creating category');
-        });
-           
-    }
-    
-    const [newCategoryName, setCategoryName] = useState('');
-    const {loading : profileLoading, data : profileData} = useProfile();
-    const [categories, setCategories] = useState([] as any[]);
-    const [editedCategory, setEditedCategory] = useState(null);
+    fetchCategories();
+  }
 
-    useEffect(() => {
-        fetchCategories();
-    }, []);
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
 
-   function fetchCategories() {
-        fetch('/api/categories').then(res => {
-            res.json().then(categories => {
-                setCategories(categories);
-            });
-        });
-    } 
+  console.log(profileData);
+  if (!profileData.admin) {
+    console.log(profileData);
+    return 'Not an admin';
+  }
 
-    if (profileLoading) {
-        return <div>Loading...</div>
-    }
-
-    if (!profileData.admin) {
-        return <div>Not authorized</div>
-    }
-
-    async function handleDeleteClick(_id) {
-        console.log('deleting....');
-
-        await fetch('/api/categories?_id=' + _id, {
-            method: 'DELETE'
-        }).then(() => {
-            console.log('delete');
-            fetchCategories();
-        });
-    }
-
-    return (
-        <section className="mt-8 max-w-md mx-auto">
-            <Tabs isAdmin={true} />
-            <form className="mt-8" onSubmit={handleCategorySubmit}>
-                <div className="flex gap-2 items-end">
-                    <div className="grow">
-                        <label>
-                            {editedCategory ? 'Update Category' : 'New Category'}
-                            {editedCategory && (
-                                <> : <b>{editedCategory.name}</b> </>
-                            )}
-                        
-                        </label>
-                        <input type="text" value={newCategoryName} onChange={ev => setCategoryName(ev.target.value)} />
-                    </div>
-                    <div className="pb-2">
-                        <button className="border border-primary">
-                            {editedCategory ? 'Update' : 'Create'}
-                        </button>
-                        <button onClick={() => {
-                            setEditedCategory(null);
-                            setCategoryName('');
-                        }}>Cancel</button>
-                    </div>
-                </div>
-            </form>
-            <div>
-                <h2 className="mt-8 text-sm text-gray-500">Existing categories</h2>
-                {categories?.length > 0 && categories.map((category: any) => {
-                    return (
-                        <div className="bg-gray-100 rounded-lg p-2 px-4 flex gap-1">
-
-                            <div
-                                className="grow hover:underline cursor-pointer"
-                            >{category.name}</div>
-
-                            <div className="flex gap-1">
-
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                    setEditedCategory(category);
-                                    setCategoryName(category.name);
-                                }}>Edit</button>
-
-
-                                   <DeleteButton label="Delete" onDelete={() => handleDeleteClick(category._id)} /> 
-
-                            </div>
-
-                        </div>
-                    )
-                })}
+  return (
+    <section className="mt-8 max-w-2xl mx-auto">
+      <Tabs isAdmin={true} />
+      <form className="mt-8" onSubmit={handleCategorySubmit}>
+        <div className="flex gap-2 items-end">
+          <div className="grow">
+            <label>
+              {editedCategory ? 'Update category' : 'New category name'}
+              {editedCategory && (
+                <>: <b>{editedCategory.name}</b></>
+              )}
+            </label>
+            <input type="text"
+                   value={categoryName}
+                   onChange={ev => setCategoryName(ev.target.value)}
+            />
+          </div>
+          <div className="pb-2 flex gap-2">
+            <button className="border border-primary" type="submit">
+              {editedCategory ? 'Update' : 'Create'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditedCategory(null);
+                setCategoryName('');
+              }}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+      <div>
+        <h2 className="mt-8 text-sm text-gray-500">Existing categories</h2>
+        {categories?.length > 0 && categories.map(c => (
+          <div
+            key={c._id}
+            className="bg-gray-100 rounded-xl p-2 px-4 flex gap-1 mb-1 items-center">
+            <div className="grow">
+              {c.name}
             </div>
-
-        </section>
-    )
+            <div className="flex gap-1">
+              <button type="button"
+                      onClick={() => {
+                        setEditedCategory(c);
+                        setCategoryName(c.name);
+                      }}
+              >
+                Edit
+              </button>
+              <DeleteButton
+                label="Delete"
+                onDelete={() => handleDeleteClick(c._id)} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }

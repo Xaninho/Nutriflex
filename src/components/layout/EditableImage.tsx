@@ -33,7 +33,7 @@ export default function EditableImage({link, setLink} : {link: string, setLink: 
     return (
         <>
             {link && (
-                <Image className="rounded-lg w-full h-full mb-1" src={link} width={0} height={0} alt= {'avatar'}/>
+                <Image className="rounded-lg w-full h-full mb-1" src={link} width={250} height={250} alt={'avatar'} />
             )}
             {!link && (
                 <div className="bg-gray-200 p-4 text-gray-500 rounded-lg mb-1">

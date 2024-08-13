@@ -1,7 +1,6 @@
 'use client';
-import SectionHeaders from "@/components/layout/SectionHeaders";
-import UserTabs from "@/components/layout/UserTabs";
-import {useProfile} from "@/components/UseProfile";
+import Tabs from "@/components/layout/Tabs";
+import useProfile from "@/components/useProfile";
 import {dbTimeForHuman} from "@/libs/datetime";
 import Link from "next/link";
 import {useEffect, useState} from "react";
@@ -9,7 +8,7 @@ import {useEffect, useState} from "react";
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
-  const {loading, data:profile} = useProfile();
+  const {loading:profileLoading, data:profile} = useProfile();
 
   useEffect(() => {
     fetchOrders();
@@ -25,9 +24,15 @@ export default function OrdersPage() {
     })
   }
 
+  
+  if (profileLoading) {
+    return 'Loading user info...';
+  }
+
+
   return (
     <section className="mt-8 max-w-2xl mx-auto">
-      <UserTabs isAdmin={profile.admin} />
+      <Tabs isAdmin={profile.admin} />
       <div className="mt-8">
         {loadingOrders && (
           <div>Loading orders...</div>

@@ -5,7 +5,8 @@ import mongoose from "mongoose";
 import {getServerSession} from "next-auth";
 
 export async function PUT(req : any) {
-  mongoose.connect(process.env.MONGO_URL ?? '');
+  mongoose.connect(process.env.MONGO_URL);
+        
   const data = await req.json();
   const {_id, name, image, ...otherUserInfo} = data;
 
@@ -27,7 +28,8 @@ export async function PUT(req : any) {
 }
 
 export async function GET(req: any) {
-  mongoose.connect(process.env.MONGO_URL ?? '');
+          mongoose.connect(process.env.MONGO_URL);
+        
 
   const url = new URL(req.url);
   const _id = url.searchParams.get('_id');

@@ -10,9 +10,6 @@ if (!process.env.MONGO_URL) {
 }
 
 const uri = process.env.MONGO_URL;
-console.log('here it is------------------------------------------------------')
-console.log('--------------------------------------------');
-console.log(process.env.MONGO_URL)
 const options = {};
 
 let client: MongoClient;
@@ -23,8 +20,6 @@ if (process.env.NODE_ENV === "development") {
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   if (!global._mongoClientPromise) {
-    console.log('-------dev')
-    console.log(uri)
     client = new MongoClient(uri, options);
     global._mongoClientPromise = client.connect();
   }

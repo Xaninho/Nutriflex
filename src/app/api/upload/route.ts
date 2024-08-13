@@ -10,7 +10,7 @@ export async function POST(req : any) {
 
     //@ts-ignore
     const s3Client = new S3Client({
-      region: 'us-east-1',
+      region: 'eu-north-1',
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY,
         secretAccessKey: process.env.AWS_SECRET_KEY,
@@ -34,7 +34,6 @@ export async function POST(req : any) {
       ContentType: file.type,
       Body: buffer,
     }));
-
 
     const link = 'https://'+bucket+'.s3.amazonaws.com/'+newFileName;
     return Response.json(link);

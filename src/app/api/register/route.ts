@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 export async function POST(req : any) {
   console.log('vai começar');
   const body = await req.json();
-  mongoose.connect(process.env.MONGO_URL ?? '');
+          mongoose.connect(process.env.MONGO_URL);
+        
   console.log(process.env.MONGO_URL);
   const pass = body.password;
   if (!pass?.length || pass.length < 5) {

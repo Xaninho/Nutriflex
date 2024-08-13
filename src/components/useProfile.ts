@@ -9,6 +9,8 @@ export default function useProfile() {
         setLoading(true);
         fetch('/api/profile').then(response => {
             response.json().then(data => {
+                console.log('use profile')
+                console.log(data)
                 setData(data);
                 setLoading(false);
             })

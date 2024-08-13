@@ -17,7 +17,7 @@ export default function UserForm({user,onSave} : any) {
   const [admin, setAdmin] = useState(user?.admin || false);
   const {data:loggedInUserData} = useProfile();
 
-  function handleAddressChange(propName : string, value : any) { {
+  function handleAddressChange(propName : string, value : any) {
     if (propName === 'phone') setPhone(value);
     if (propName === 'streetAddress') setStreetAddress(value);
     if (propName === 'postalCode') setPostalCode(value);
@@ -59,7 +59,7 @@ export default function UserForm({user,onSave} : any) {
           addressProps={{phone, streetAddress, postalCode, city, country}}
           setAddressProp={handleAddressChange}
         />
-        {loggedInUserData!.admin && (
+        {loggedInUserData?.admin && (
           <div>
             <label className="p-2 inline-flex items-center gap-2 mb-2" htmlFor="adminCb">
               <input
@@ -75,5 +75,4 @@ export default function UserForm({user,onSave} : any) {
       </form>
     </div>
   );
-}
 }

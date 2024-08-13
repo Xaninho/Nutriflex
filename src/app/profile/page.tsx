@@ -1,12 +1,7 @@
 'use client';
-import EditableImage from "@/components/layout/EditableImage";
-import InfoBox from "@/components/layout/InfoBox";
-import SuccessBox from "@/components/layout/SuccessBox";
 import UserForm from "@/components/layout/UserForm";
 import Tabs from "@/components/layout/Tabs";
 import {useSession} from "next-auth/react";
-import Image from "next/image";
-import Link from "next/link";
 import {redirect} from "next/navigation";
 import {useEffect, useState} from "react";
 import toast from "react-hot-toast";
@@ -15,7 +10,7 @@ export default function ProfilePage() {
   const session = useSession();
 
   const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [profileFetched, setProfileFetched] = useState(false);
   const {status} = session;
 
@@ -23,6 +18,8 @@ export default function ProfilePage() {
     if (status === 'authenticated') { 
       fetch('/api/profile').then(response => {
         response.json().then(data => {
+          console.log('profile page')
+          console.log(data);
           setUser(data);
           setIsAdmin(data.admin);
           setProfileFetched(true);
