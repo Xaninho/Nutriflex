@@ -48,7 +48,7 @@ export async function POST(req : any) {
     stripeLineItems.push({
       quantity: 1,
       price_data: {
-        currency: 'USD',
+        currency: 'EUR',
         product_data: {
           name: productName,
         },
@@ -72,7 +72,7 @@ export async function POST(req : any) {
         shipping_rate_data: {
           display_name: 'Delivery fee',
           type: 'fixed_amount',
-          fixed_amount: {amount: 500, currency: 'USD'},
+          fixed_amount: {amount: 500, currency: 'EUR'},
         },
       }
     ],
