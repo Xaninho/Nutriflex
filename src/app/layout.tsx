@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import { AppProvider } from "@/components/AppContext";
 import { Toaster } from 'react-hot-toast'
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "700"] });
+const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${poppins.className}`}>
+      <body className={`${inter.className}`}>
           <AppProvider>
             
             <Toaster />

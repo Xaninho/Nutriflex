@@ -14,19 +14,21 @@ function AuthLinks({status, userName} : {status: string, userName: string}) {
           Hello, {userName}
         </Link>
         <button
-          onClick={() => signOut()}
-          className="bg-primary rounded-full text-white px-8 py-2">
-          Logout
-        </button>
+    onClick={() => signOut()}
+    className="bg-transparent text-gray-500 hover:text-red-500 hover:border-red-500 px-8 py-2 font-medium border rounded-xl transition-colors duration-200 ease-in-out">
+    Logout
+</button>
+
       </>
     );
   }
   if (status === 'unauthenticated') {
     return (
       <>
-        <Link href={'/login'}>Login</Link>
-        <Link href={'/register'} className="bg-primary rounded-full text-white px-8 py-2">
-          Register
+        <Link href={'/login'} className="hover:text-black transition-all font-medium">Sign In</Link>
+        <Link href={'/register'} className="w-[100px] bg-primary h-[40px] my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg
+ after:absolute after:top-0 after:-left-full after:w-full after:h-full after:bg-gradient-to-r after:from-red-900 after:to-[rgba(241, 58, 1, 0.5)] after:transition-all after:duration-500 after:ease-in-out after:z-[-1] after:rounded-xl hover:after:left-0 text-[#fff]">
+          Sign Up
         </Link>
       </>
     );

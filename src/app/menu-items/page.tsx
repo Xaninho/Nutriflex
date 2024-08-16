@@ -28,7 +28,7 @@ export default function MenuItemsPage() {
   }
 
   return (
-    <section className="mt-8 max-w-2xl mx-auto">
+    <section className="mt-8 max-w-2xl mx-auto py-8">
       <Tabs isAdmin={true} />
       <div className="mt-8">
         <Link
