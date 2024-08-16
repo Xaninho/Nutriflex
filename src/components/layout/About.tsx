@@ -1,6 +1,6 @@
 export default function AboutMenu() {
     return (
-        <section className="text-center mb-16">            
+        <section className="max-w-6xl mx-auto text-center mb-16">            
             
             <div>
                 <h3 className="uppercase text-gray-600 leading-4">Our Story</h3>

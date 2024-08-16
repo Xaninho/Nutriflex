@@ -24,6 +24,7 @@ export default function NewMenuItemPage() {
         if (response.ok)
           resolve();
         else
+        console.log('errozito')
           reject();
       });
   

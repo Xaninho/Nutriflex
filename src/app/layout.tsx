@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import { AppProvider } from "@/components/AppContext";
 import { Toaster } from 'react-hot-toast'
 
-const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`max-w-6xl mx-auto border p-4 ${roboto.className}`}>
+      <body className={`${poppins.className}`}>
           <AppProvider>
             
             <Toaster />
