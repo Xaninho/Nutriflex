@@ -68,7 +68,10 @@ export default function MenuItemForm({onSubmit,menuItem} : any) {
                               addLabel={'Add ingredients prices'}
                               props={extraIngredientPrices}
                               setProps={setExtraIngredientPrices}/>
-          <button type="submit">Save</button>
+          <button
+          className="w-full sm:w-[220px] md:w-[250px] bg-primary h-[40px] sm:h-[45px] md:h-[50px] my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg after:absolute after:top-0 after:-left-full after:w-full after:h-full after:bg-gradient-to-r after:from-red-900 after:to-[rgba(241, 58, 1, 0.5)] after:transition-all after:duration-500 after:ease-in-out after:z-[-1] after:rounded-xl hover:after:left-0 text-[#fff]"
+          
+        type="submit">Save</button>
         </div>
       </div>
     </form>

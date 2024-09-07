@@ -51,76 +51,88 @@ export default function MenuItem(menuItem : any) {
   return (
     <>
       {showPopup && (
-        <div
-          onClick={() => setShowPopup(false)}
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-          <div
-            onClick={ev => ev.stopPropagation()}
-            className="my-8 bg-white p-2 rounded-lg max-w-md">
-            <div
-              className="overflow-y-scroll p-2"
-              style={{maxHeight:'calc(100vh - 100px)'}}>
-              <Image
-                src={image}
-                alt={name}
-                width={300} height={200}
-                className="mx-auto" />
-              <h2 className="text-lg font-bold text-center mb-2">{name}</h2>
-              <p className="text-center text-gray-500 text-sm mb-2">
-                {description}
-              </p>
-              {sizes?.length > 0 && (
-                <div className="py-2">
-                  <h3 className="text-center text-gray-700">Pick your size</h3>
-                  {sizes.map((size: any) => (
-                    <label
-                      key={size._id}
-                      className="flex items-center gap-2 p-4 border rounded-md mb-1">
-                      <input
-                        type="radio"
-                        onChange={() => setSelectedSize(size)}
-                        checked={selectedSize?.name === size.name}
-                        name="size"/>
-                      {size.name} ${basePrice + size.price}
-                    </label>
-                  ))}
-                </div>
-              )}
-              {extraIngredientPrices?.length > 0 && (
-                <div className="py-2">
-                  <h3 className="text-center text-gray-700">Any extras?</h3>
-                  {extraIngredientPrices.map((extraThing: any) => (
-                    <label
-                      key={extraThing._id}
-                      className="flex items-center gap-2 p-4 border rounded-md mb-1">
-                      <input
-                        type="checkbox"
-                        onChange={ev => handleExtraThingClick(ev, extraThing)}
-                        checked={selectedExtras.map(e => e._id).includes(extraThing._id)}
-                        name={extraThing.name} />
-                      {extraThing.name} +${extraThing.price}
-                    </label>
-                  ))}
-                </div>
-              )}
-              <FlyingButton
-                targetTop={'5%'}
-                targetLeft={'95%'}
-                src={image}>
-                <div className="primary sticky bottom-2"
-                     onClick={handleAddToCartButtonClick}>
-                  Add to cart ${selectedPrice}
-                </div>
-              </FlyingButton>
-              <button
-                className="mt-2"
-                onClick={() => setShowPopup(false)}>
-                Cancel
-              </button>
+  <div
+    onClick={() => setShowPopup(false)}
+    className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 ">
+    <div
+      onClick={(ev) => ev.stopPropagation()}
+      className="bg-transparent rounded-xl max-w-md shadow-slate-200 h-fit transition-all duration-500 sm:p-4">
+      <div
+        className=" overflow-y-scroll rounded-xl text-center h-fit group bg-white transition-all duration-500 overflow-y-hidden sm:overflow-y-auto"
+       >
+        <div className="text-center">
+          <Image
+            src={image}
+            alt={name}
+            width={300}
+            height={200}
+            className="w-full h-full rounded-xl"
+          />
+        </div>
+        <div className="flex flex-col gap-2 px-12 py-3 text-left">
+          <h4 className="font-semibold text-2xl my-3 leading-7">{name}</h4>
+          <p className="text-gray-500 text-sm line-clamp-3">
+            {description}
+          </p>
+          {sizes?.length > 0 && (
+            <div className="py-2">
+              <h3 className="text-left text-gray-700">Pick your size</h3>
+              {sizes.map((size) => (
+                <label
+                  key={size._id}
+                  className="flex items-center gap-2 p-4 border rounded-md mb-1">
+                  <input
+                    type="radio"
+                    onChange={() => setSelectedSize(size)}
+                    checked={selectedSize?.name === size.name}
+                    name="size"
+                  />
+                  {size.name} ${basePrice + size.price}
+                </label>
+              ))}
             </div>
+          )}
+          {extraIngredientPrices?.length > 0 && (
+            <div className="py-2">
+              <h3 className="text-left text-gray-700">Any extras?</h3>
+              {extraIngredientPrices.map((extraThing) => (
+                <label
+                  key={extraThing._id}
+                  className="flex items-center gap-2 p-4 border rounded-md mb-1">
+                  <input
+                    type="checkbox"
+                    onChange={(ev) => handleExtraThingClick(ev, extraThing)}
+                    checked={selectedExtras.map((e) => e._id).includes(extraThing._id)}
+                    name={extraThing.name}
+                  />
+                  {extraThing.name} +${extraThing.price}
+                </label>
+              ))}
+            </div>
+          )}      
+          <div className="flex justify-center gap-4 text-xs sm:text-sm items-center">
+          
+          <button
+            className="p-4 hover:bg-red-500 hover:text-white rounded-xl transition-all duration-200"
+            onClick={() => setShowPopup(false)}>
+            Cancel
+          </button>
+          <FlyingButton
+            targetTop={'5%'}
+            targetLeft={'95%'}
+            src={image}
+            onClick={handleAddToCartButtonClick}>
+            <p className="w-[250px] bg-primary h-[50px] my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg after:absolute after:top-0 after:-left-full after:w-full after:h-full after:bg-gradient-to-r after:from-red-900 after:to-[rgba(241, 58, 1, 0.5)] after:transition-all after:duration-500 after:ease-in-out after:z-[-1] after:rounded-xl hover:after:left-0 text-[#fff]">
+              Add to cart ${selectedPrice}
+            </p>
+          </FlyingButton>
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
+
       <MenuItemTile
         onAddToCart={handleAddToCartButtonClick}
         {...menuItem} />

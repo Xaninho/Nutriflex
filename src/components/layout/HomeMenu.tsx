@@ -16,19 +16,19 @@ export default function HomeMenu() {
   }, []);
 
   return (
-    <section className="max-w-6xl  mx-auto">
+    <section className="max-w-6xl mx-auto px-8">
       <div className="text-center mb-4">
         <SectionHeaders
           subHeader={'check out'}
-          mainHeader={'Our Best Sellers'} />
+          mainHeader={'Our Best Sellers'}
+        />
       </div>
-      <div className="flex flex-row gap-6">
-        {
-          bestSellers?.length > 0 && bestSellers.map(item => (
-            <MenuItem key={item._id} {...item} />
-          ))
-        }
+      <div className="flex flex-col sm:flex-row gap-6">
+        {bestSellers?.length > 0 && bestSellers.map(item => (
+          <MenuItem key={item._id} {...item} />
+        ))}
       </div>
     </section>
+
   );
 }

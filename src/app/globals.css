@@ -28,7 +28,7 @@ label + input{
     margin-top: -2px;
 }
 button, .button{
-    @apply flex w-full justify-center gap-2 ;
+    @apply flex w-full gap-2 ;
 }
 
 button[type="submit"]:disabled, .submit:disabled{

@@ -6,7 +6,7 @@ export default function MenuItemTile({onAddToCart, ...item}: any) {
   } = item;
   const hasSizesOrExtras = sizes?.length > 0 || extraIngredientPrices?.length > 0;
   return (
-    <div className="pb-6 rounded-lg shadow-2xl shadow-slate-200 text-center h-fit group hover:bg-white hover:drop-shadow-2xl hover:drop-shadow-2xl transition-all duration-500">
+    <div className="pb-6 rounded-lg shadow-2xl max-w-[400px] shadow-slate-200 text-center h-fit group hover:bg-white hover:drop-shadow-2xl hover:drop-shadow-2xl transition-all duration-500">
       <div className="text-center ">
         <img src={image} className="w-full h-full rounded-lg" alt="pizza"/>
       </div>

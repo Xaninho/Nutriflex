@@ -36,46 +36,48 @@ export default function OrderPage() {
   }
 
   return (
-    <section className="max-w-2xl mx-auto mt-8">
-      <div className="text-center">
-        <SectionHeaders mainHeader="Your order" />
-        <div className="mt-4 mb-8">
-          <p>Thanks for your order.</p>
-          <p>We will call you when your order will be on the way.</p>
-        </div>
+    <section className="max-w-6xl mx-auto px-8">
+  <div className="text-center">
+    <SectionHeaders mainHeader="Your order" />
+    <div className="mt-4 mb-8">
+      <p>Thanks for your order.</p>
+      <p>We will call you when your order will be on the way.</p>
+    </div>
+  </div>
+  {loadingOrder && (
+    <div className="text-center py-8">Loading order...</div>
+  )}
+  {order && (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+    {/* Coluna de Itens do Pedido */}
+    <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        {order.cartProducts.map((product) => (
+          <CartProduct key={product._id} product={product} />
+        ))}
       </div>
-      {loadingOrder && (
-        <div>Loading order...</div>
-      )}
-      {order && (
-        <div className="grid md:grid-cols-2 md:gap-16">
-          <div>
-            {order.cartProducts.map(product => (
-              <CartProduct key={product._id} product={product} />
-            ))}
-            <div className="text-right py-2 text-gray-500">
-              Subtotal:
-              <span className="text-black font-bold inline-block w-8">${subtotal}</span>
-              <br />
-              Delivery:
-              <span className="text-black font-bold inline-block w-8">$5</span>
-              <br />
-              Total:
-              <span className="text-black font-bold inline-block w-8">
-                ${subtotal + 5}
-              </span>
-            </div>
-          </div>
-          <div>
-            <div className="bg-gray-100 p-4 rounded-lg">
-              <AddressInputs
-                disabled={true}
-                addressProps={order}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+    </div>
+  
+    {/* Coluna de Resumo do Pedido */}
+    <div className="bg-gray-100 p-4 rounded-lg h-fit">
+      <div className="text-right py-2 text-gray-500">
+        Subtotal:
+        <span className="text-black font-bold inline-block ml-2">${subtotal}</span>
+        <br />
+        Delivery:
+        <span className="text-black font-bold inline-block ml-2">$5</span>
+        <br />
+        Total:
+        <span className="text-black font-bold inline-block ml-2">
+          ${subtotal + 5}
+        </span>
+      </div>
+      <AddressInputs disabled={true} addressProps={order} />
+    </div>
+  </div>
+  
+  )}
+</section>
+
   );
 }
