@@ -34,6 +34,7 @@ export default function OrderPage() {
       subtotal += cartProductPrice(product);
     }
   }
+  subtotal = parseFloat(subtotal.toFixed(2));
 
   return (
     <section className="max-w-6xl mx-auto px-8">
@@ -62,14 +63,14 @@ export default function OrderPage() {
     <div className="bg-gray-100 p-4 rounded-lg h-fit">
       <div className="text-right py-2 text-gray-500">
         Subtotal:
-        <span className="text-black font-bold inline-block ml-2">${subtotal}</span>
+        <span className="text-black font-bold inline-block ml-2">€{subtotal}</span>
         <br />
         Delivery:
-        <span className="text-black font-bold inline-block ml-2">$5</span>
+        <span className="text-black font-bold inline-block ml-2">€5</span>
         <br />
         Total:
         <span className="text-black font-bold inline-block ml-2">
-          ${subtotal + 5}
+          {subtotal + 5}€
         </span>
       </div>
       <AddressInputs disabled={true} addressProps={order} />

@@ -86,10 +86,11 @@ export default function EditMenuItemPage() {
     return (
         <section className="mt-8">
             <Tabs isAdmin={true} />
-            <div>
-                <Left />
-                <Link href="/menu-items" className="button">
-                        <span>Show all menu items</span>
+            
+            <div className="mt-8">
+                <Link href="/menu-items" className="button justify-center">
+                  <Left />
+                  <span>Show all menu items</span>
                 </Link>
             </div>
 

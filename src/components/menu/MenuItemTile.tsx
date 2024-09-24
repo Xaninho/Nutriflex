@@ -1,10 +1,12 @@
 import AddToCartButton from "@/components/menu/AddToCartButton";
 
 export default function MenuItemTile({onAddToCart, ...item}: any) {
+
   const {image, description, name, basePrice,
     sizes, extraIngredientPrices,
   } = item;
   const hasSizesOrExtras = sizes?.length > 0 || extraIngredientPrices?.length > 0;
+  
   return (
     <div className="pb-6 rounded-lg shadow-2xl max-w-[400px] shadow-slate-200 text-center h-fit group hover:bg-white hover:drop-shadow-2xl hover:drop-shadow-2xl transition-all duration-500">
       <div className="text-center ">
@@ -16,23 +18,12 @@ export default function MenuItemTile({onAddToCart, ...item}: any) {
             {description}
           </p>
 
-          {
-            /*
-
-            <h3 className="font-semibold text-xl my-3 leading-7">
-              ${basePrice} USD
-            </h3>
-
-            */
-
-          }
-          
           <AddToCartButton
-        image={image}
-        hasSizesOrExtras={hasSizesOrExtras}
-        onClick={onAddToCart}
-        basePrice={basePrice}
-      />
+            image={image}
+            hasSizesOrExtras={hasSizesOrExtras}
+            onClick={onAddToCart}
+            basePrice={basePrice}
+          />
       </div>
       
     </div>

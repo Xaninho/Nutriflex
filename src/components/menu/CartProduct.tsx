@@ -19,7 +19,7 @@ export default function CartProduct({product,onRemove} : {product: any, onRemove
     {product.extras?.length > 0 && (
       <div className="text-sm text-gray-500 mt-1">
         {product.extras.map((extra) => (
-          <div key={extra.name}>{extra.name} ${extra.price}</div>
+          <div key={extra.name}>{extra.name} €{extra.price}</div>
         ))}
       </div>
     )}
@@ -31,12 +31,12 @@ export default function CartProduct({product,onRemove} : {product: any, onRemove
     <div className="flex 
       justify-between items-center
       text-lg font-semibold text-primary mt-2">
-      ${cartProductPrice(product)}
+      €{cartProductPrice(product)}
       {!!onRemove && (
       <div>
         <button
           type="button"
-          onClick={() => onRemove(product.index)}
+          onClick={() => onRemove(product)}
           className="text-red-600 hover:text-red-800 transition-all duration-300">
           <Trash />
         </button>
