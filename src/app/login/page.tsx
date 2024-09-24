@@ -44,7 +44,8 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
-                <button type="submit" disabled={loginInProgress}>Login</button>
+                <button type="submit" disabled={loginInProgress} className="w-full bg-primary h-[50px] my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg
+                  after:absolute after:top-0 after:-left-full after:w-full after:h-full after:bg-gradient-to-r after:from-red-900 after:to-[rgba(241, 58, 1, 0.5)] after:transition-all after:duration-500 after:ease-in-out after:z-[-1] after:rounded-xl hover:after:left-0 text-[#fff]">Login</button>
 
                 <div className="my-4 text-center text-gray-500">
                     or login with provider
@@ -53,7 +54,7 @@ export default function LoginPage() {
 
                 <button type="button" onClick={() => signIn('google', {callbackUrl: '/'})}
                     className="flex gap-4 justify-center">
-                <Image src={'/google.png'} alt={''} width={24} height={24} />
+                    <Image src={'/google.png'} alt={''} width={24} height={24} />
                     Login with google
                 </button>
 

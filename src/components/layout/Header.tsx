@@ -83,7 +83,7 @@ export default function Header() {
           className="md:hidden p-4 bg-gray-200 rounded-lg mt-2 flex flex-col gap-2 text-center">
           <Link className="hover:text-black transition-all font-medium" href={'/'}>Home</Link>
           <Link className="hover:text-black transition-all font-medium" href={'/menu'}>Menu</Link>
-          <Link className="hover:text-black transition-all font-medium" href={'/#about'}>About</Link>
+          <Link className="hover:text-black transition-all font-medium" href={'/#about'}>Process</Link>
           <Link className="hover:text-black transition-all font-medium" href={'/#contact'}>Contact</Link>
           <AuthLinks status={status} userName={userName} />
         </div>
@@ -95,7 +95,7 @@ export default function Header() {
           </Link>
           <Link className="hover:text-black transition-all font-medium" href={'/'}>Home</Link>
           <Link className="hover:text-black transition-all font-medium" href={'/menu'}>Menu</Link>
-          <Link className="hover:text-black transition-all font-medium" href={'/#about'}>About</Link>
+          <Link className="hover:text-black transition-all font-medium" href={'/#about'}>Process</Link>
           <Link className="hover:text-black transition-all font-medium" href={'/#contact'}>Contact</Link>
         </nav>
         <nav className="flex items-center gap-4 text-gray-500 font-semibold">

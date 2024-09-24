@@ -3,6 +3,7 @@ import { Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import { AppProvider } from "@/components/AppContext";
+import Contact from "@/components/layout/Contact";
 import { Toaster } from 'react-hot-toast'
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "500", "700"] });
@@ -27,9 +28,11 @@ export default function RootLayout({
 
             <Header />
             
-            {children}
-            
-            <footer className="border-t p-8 text-center text-gray-500 mt-16">
+            {children}  
+
+
+            <Contact />
+            <footer className="bg-[#9e2905]  p-8 text-center text-white">
               @copy; 2024 All rights reserved
             </footer>
 

@@ -101,18 +101,12 @@ export default function CategoriesPage() {
                    onChange={ev => setCategoryName(ev.target.value)}
             />
           </div>
-          <div className="pb-2 flex gap-2">
-            <button className="border border-primary" type="submit">
+          <div className="pb-2 flex gap-2 items-end grow">
+            <button className="w-full bg-primary h-[43px]  flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg
+                  after:absolute after:top-0 after:-left-full after:w-full after:h-full after:bg-gradient-to-r after:from-red-900 after:to-[rgba(241, 58, 1, 0.5)] after:transition-all after:duration-500 after:ease-in-out after:z-[-1] after:rounded-xl hover:after:left-0 text-[#fff]" type="submit">
               {editedCategory ? 'Update' : 'Create'}
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                setEditedCategory(null);
-                setCategoryName('');
-              }}>
-              Cancel
-            </button>
+            
           </div>
         </div>
       </form>
@@ -125,7 +119,7 @@ export default function CategoriesPage() {
             <div className="grow">
               {c.name}
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-5">
               <button type="button"
                       onClick={() => {
                         setEditedCategory(c);
